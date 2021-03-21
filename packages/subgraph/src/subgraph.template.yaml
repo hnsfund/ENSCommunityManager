@@ -1,0 +1,34 @@
+specVersion: 0.0.2
+schema:
+  file: ./src/schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: CommunityManager
+    network: localhost
+    source:
+      address: '{{CommunityManagerAddress}}'
+      abi: CommunityManager
+      startBlock: 1
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Purpose
+        - Sender
+      abis:
+        - name: CommunityManager
+          file: ./abis/CommunityManager.json
+      eventHandlers:
+        - event: MemberAdded(indexed address,bytes32)
+          handler: handleMemberAdded
+        - event: MemberRemoved(indexed address)
+        handler: handleMemberRemoved
+        - event: SubdomainUpdated(indexed address,bytes32)
+        handler: handleSubdomainUpdated
+        - event: RoleGranted(bytes32,address,address)
+        handler: handleRoleGranted
+        - event: RoleRevoked(bytes32,address,address)
+        handler: handleRoleRevoked
+        
+      file: ./src/mapping.ts
